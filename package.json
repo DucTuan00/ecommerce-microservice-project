@@ -4,9 +4,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "api-gateway": "cd api-gateway && node server.js",
     "auth-service": "cd auth-service && node server.js",
     "user-service": "cd user-service && node server.js",
-    "start-all": "npm-run-all --parallel auth-service user-service"
+    "start-all": "npm-run-all --parallel api-gateway auth-service user-service"
   },
   "keywords": [],
   "author": "",
