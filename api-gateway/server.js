@@ -17,6 +17,10 @@ app.use('/api/user', createProxyMiddleware({
     target: 'http://localhost:3002/api/user', 
     changeOrigin: true,
 }));
+app.use('/api/product', createProxyMiddleware({ 
+    target: 'http://localhost:3003/api/product', 
+    changeOrigin: true,
+}));
 
 app.listen(3000, () => {
     console.log('API Gateway running on http://localhost:3000');
