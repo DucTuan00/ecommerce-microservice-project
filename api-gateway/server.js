@@ -24,8 +24,18 @@ app.use('/api/product', createProxyMiddleware({
     changeOrigin: true,
 }));
 
+app.use('/api/category', createProxyMiddleware({ 
+    target: 'http://localhost:3003/api/category', 
+    changeOrigin: true,
+}));
+
 app.use('/api/cart', createProxyMiddleware({ 
     target: 'http://localhost:3004/api/cart', 
+    changeOrigin: true,
+}));
+
+app.use('/api/order', createProxyMiddleware({ 
+    target: 'http://localhost:3005/api/order', 
     changeOrigin: true,
 }));
 

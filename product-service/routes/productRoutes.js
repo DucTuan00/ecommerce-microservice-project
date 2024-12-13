@@ -27,4 +27,6 @@ router.put('/:id', authMiddleware(['1']), upload.fields([{ name: 'image'}]), pro
 
 router.put('/delete/:id', authMiddleware(['1']), productController.deleteProduct);
 
+router.put('/quantity/:id', authMiddleware(['2']), productController.updateProductQuantity);
+
 module.exports = router;

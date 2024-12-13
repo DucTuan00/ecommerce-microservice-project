@@ -14,7 +14,7 @@ exports.getProductById = (req, res) => {
     productModel.getProductById(id, (err, results) => {
         if (err) return res.status(500).json({ message: 'Error getting product' });
         res.json(results);
-    })
+    });
 }
 
 // Thêm sản phẩm
@@ -126,5 +126,30 @@ exports.searchProducts = (req, res) => {
             }
             return res.status(200).json(products);
         });
+    }
+};
+
+exports.updateProductQuantity = (req, res) => {
+    const id = req.params.id;
+    const { quantity } = req.body; // quantity có thể là số âm để giảm tồn kho
+
+    try {
+        productModel.getProductById(id, (err, product) => {
+            if (err) return res.status(500).json({ message: 'Error getting product' });
+            
+            // Tính số lượng mới
+            const newQuantity = product.quantity + quantity;
+            if (newQuantity < 0) {
+                return res.status(400).json({ message: 'Not enough stock' });
+            }
+            
+            productModel.updateProductQuantity(id, newQuantity, (err, results) => {
+                if (err) return res.status(500).json({ message: 'Can not update quantity' });
+                res.status(200).json({ message: 'Product quantity updated successfully', newQuantity });
+            });
+        });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ message: 'Internal server error' });
     }
 };

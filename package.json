@@ -9,7 +9,8 @@
     "user-service": "cd user-service && node server.js",
     "product-service": "cd product-service && node server.js",
     "cart-service": "cd cart-service && node server.js",
-    "start-all": "npm-run-all --parallel api-gateway auth-service user-service product-service cart-service"
+    "order-service": "cd order-service && node server.js",
+    "start-all": "npm-run-all --parallel api-gateway auth-service user-service product-service cart-service order-service"
   },
   "keywords": [],
   "author": "",

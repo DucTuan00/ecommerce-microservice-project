@@ -165,3 +165,28 @@ exports.updateCart = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
+
+exports.clearCart = async (req, res) => {
+    const user_id = req.userId;
+
+    try {
+        //Kiểm tra user tồn tại qua User Service
+        const userResponse = await axios.get(
+            `http://localhost:3002/api/user/getUser/${user_id}`,
+            {
+                headers: { Authorization: req.headers.authorization } // Forward token từ client
+            }
+        );
+        if (userResponse.status !== 200) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        cartModel.clearCart(user_id, (err, result) => {
+            if (err) return res.status(500).json({ message: 'Error clear carts' });
+            res.status(200).json({ message: 'Clear cart succesfully' });
+        });
+    } catch (error) {
+        console.error('Error clearing cart:', error.message);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
