@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Sản Phẩm</title>
+    <script src="https://kit.fontawesome.com/91c8b57a30.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to left, #f8e9e8, #e5f6f6, #fff0f5);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 50px;
+            background-color: #fff;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-container input[type="text"] {
+            width: 300px;
+            height: 40px;
+            padding: 0 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .search-container input[type="text"]:focus {
+            border-color: #ff6600;
+            outline: none;
+        }
+
+        #search-button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .cart-icon {
+            background-color: #f0f0f0;
+            border-radius: 50%;
+            padding: 10px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-actions a {
+            text-decoration: none;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .header-actions .fa-shopping-cart {
+            font-size: 20px;
+        }
+
+        /* Categories */
+        .categories {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            background-color: #fff;
+        }
+
+        .categories a {
+            text-decoration: none;
+            color: #333;
+            padding: 5px 10px;
+            transition: color 0.3s ease;
+        }
+
+        .categories a.active {
+            color: #ff6600;
+            border-bottom: 2px solid #ff6600;
+        }
+
+
+        .container {
+            width: 90%;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #ff416c;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .add-product-btn,
+        .delete-selected-btn {
+            display: inline-block;
+            width: 80px;
+            padding: 5px;
+            color: white;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-product-btn:hover {
+            background-color: #218838;
+        }
+
+        .delete-selected-btn {
+            background-color: #dc3545;
+            padding: 4px;
+        }
+
+        .add-product-btn {
+            background-color: #28a745;
+        }
+
+        .delete-selected-btn:hover {
+            background-color: #c82333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            max-width: 100px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            word-break: break-all;
+        }
+
+        th {
+            background-color: #f7f7f7;
+            font-weight: bold;
+        }
+
+        tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .actions-btn {
+            text-align: right;
+            width: 100px;
+        }
+
+        .actions-btn a {
+            margin-left: 10px;
+            color: white;
+            padding: 5px 10px;
+            background-color: #007bff;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .actions-btn a.delete-btn {
+            background-color: #dc3545;
+        }
+
+        .actions-btn a:hover {
+            opacity: 0.8;
+        }
+
+        .select-product {
+            text-align: center;
+        }
+
+        th.select-product,
+        td.select-product {
+            width: 50px;
+        }
+
+        th.actions-btn,
+        td.actions-btn {
+            width: 50px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                width: 100%;
+                padding: 10px;
+            }
+
+            table {
+                font-size: 14px;
+            }
+
+            th,
+            td {
+                padding: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 5px;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th,
+            td {
+                padding: 5px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Placeholder for header -->
+    <div id="header-container"></div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1>Danh Sách Sản Phẩm</h1>
+
+        <!-- Add Product Button and Delete Selected Button -->
+        <a href="../addProduct/addProduct.html" class="add-product-btn">Thêm</a>
+        <button id="deleteButton" class="delete-selected-btn" disabled>Xóa</button>
+
+        <!-- Product Table -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Chọn</th>
+                    <th>Sửa</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Giá</th>
+                    <th>Danh mục</th>
+                    <th>Số lượng</th>
+                    <th>Mô tả</th>
+                </tr>
+            </thead>
+            <tbody id="productTableBody"></tbody>
+        </table>
+        <div id="pagination" style="padding: 15px;"></div>
+    </div>
+
+
+    <script>
+        // JavaScript to handle select all checkbox functionality
+        document.getElementById('select-all').addEventListener('change', function () {
+            const checkboxes = document.querySelectorAll('.select-item');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch('../header.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('header-container').innerHTML = data;
+
+                    // Load header.js explicitly after header.html is fetched
+                    const script = document.createElement('script');
+                    script.src = '../header.js';
+                    script.onload = () => {
+                        if (typeof initializeHeader === 'function') {
+                            initializeHeader(); // Call the function after header.js is loaded
+                        } else {
+                            console.error("initializeHeader function not found in header.js");
+                        }
+                    };
+                    document.body.appendChild(script);
+
+                    checkAndDisplayProductLink();
+                })
+                .catch(err => console.error("Error loading header.html:", err));
+        });
+    </script>
+
+    <script src="../checkAuth.js"></script>
+    <script src="../product/product.js"></script>
+    <script src="../check-permission.js"></script>
+
+</body>
+
+</html>
