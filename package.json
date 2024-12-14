@@ -7,12 +7,11 @@
     "api-gateway": "cd api-gateway && node server.js",
     "auth-service": "cd auth-service && node server.js",
     "user-service": "cd user-service && node server.js",
-    
-    
-    
-    
+    "product-service": "cd product-service && node server.js",
+    "cart-service": "cd cart-service && node server.js",
+    "order-service": "cd order-service && node server.js",
     "zalopay-service": "cd zalopay-service && node server.js",
-    "start-all": "npm-run-all --parallel api-gateway auth-service user-service zalopay-service"
+    "start-all": "npm-run-all --parallel api-gateway auth-service user-service product-service cart-service order-service zalopay-service"
   },
   "keywords": [],
   "author": "",

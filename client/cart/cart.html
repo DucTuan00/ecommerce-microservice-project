@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ hàng</title>
+    <link rel="stylesheet" href="./styles.css">
+    <!-- Include FontAwesome CDN -->
+    <script src="https://kit.fontawesome.com/91c8b57a30.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <div id="header-container"></div>
+
+    <div class="cart-container">
+        <h2>Giỏ hàng của bạn</h2>
+        <div class="cart-items">
+            
+        </div>
+
+        <div class="user-info">
+            <p>THÔNG TIN KHÁCH HÀNG</p>
+            <input type="text" id="phone" placeholder="Số điện thoại*" required>
+            <br>
+            <input type="text" id="address" placeholder="Địa chỉ*" required>
+        </div>
+        
+        <div class="cart-summary">
+            <p>Tổng cộng: <span class="cart-total"></span></p>
+        </div>
+
+        <div class="order-btn">
+            <a href="../order/order.html"><button class="create-order">ĐẶT HÀNG</button></a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch('../header.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('header-container').innerHTML = data;
+
+                    // Load header.js explicitly after header.html is fetched
+                    const script = document.createElement('script');
+                    script.src = '../header.js';
+                    script.onload = () => {
+                        if (typeof initializeHeader === 'function') {
+                            initializeHeader(); // Call the function after header.js is loaded
+                        } else {
+                            console.error("initializeHeader function not found in header.js");
+                        }
+                    };
+                    document.body.appendChild(script);
+
+                    checkAndDisplayProductLink();
+                })
+                .catch(err => console.error("Error loading header.html:", err));
+        });
+    </script>
+
+    <script src="cart.js"></script>
+    <script src="../check-permission.js"></script>
+
+</body>
+
+</html>

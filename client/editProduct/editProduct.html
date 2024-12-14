@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Sản Phẩm</title>
+    <script src="https://kit.fontawesome.com/91c8b57a30.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to left, #f8e9e8, #e5f6f6, #fff0f5);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 50px;
+            background-color: #fff;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-container input[type="text"] {
+            width: 300px;
+            height: 40px;
+            padding: 0 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .search-container input[type="text"]:focus {
+            border-color: #ff6600;
+            outline: none;
+        }
+
+        #search-button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .cart-icon {
+            background-color: #f0f0f0;
+            border-radius: 50%;
+            padding: 10px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-actions a {
+            text-decoration: none;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .header-actions .fa-shopping-cart {
+            font-size: 20px;
+        }
+
+        /* Categories */
+        .categories {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            background-color: #fff;
+        }
+
+        .categories a {
+            text-decoration: none;
+            color: #333;
+            padding: 5px 10px;
+            transition: color 0.3s ease;
+        }
+
+        .categories a.active {
+            color: #ff6600;
+            border-bottom: 2px solid #ff6600;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        label {
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 8px;
+        }
+        input, textarea, select {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border 0.3s ease;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #ff6600;
+        }
+        textarea {
+            resize: vertical;
+        }
+        button {
+            padding: 12px 20px;
+            background-color: #ff6600;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #fa541c;
+        }
+    </style>
+</head>
+<body>
+    <!-- Placeholder for header -->
+    <div id="header-container"></div>
+
+    <!-- Thêm Sản Phẩm -->
+    <div class="container">
+        <h2>Cập nhật Sản Phẩm</h2>
+        <form id="addProductForm">
+            <div>
+                <label for="productName">Tên sản phẩm:</label>
+                <input type="text" id="productName" name="productName" placeholder="Nhập tên sản phẩm">
+            </div>
+
+            <div>
+                <label for="productPrice">Giá sản phẩm:</label>
+                <input type="number" id="productPrice" name="productPrice" placeholder="Nhập giá sản phẩm">
+            </div>
+
+            <div>
+                <label for="productImage">Ảnh sản phẩm:</label>
+                <input type="file" id="productImage" name="productImage">
+            </div>
+
+            <div>
+                <label for="productQuantity">Số lượng:</label>
+                <input type="number" id="productQuantity" name="productQuantity" placeholder="Nhập số lượng sản phẩm">
+            </div>
+
+            <div>
+                <label for="productDescription">Mô tả sản phẩm:</label>
+                <textarea id="productDescription" name="productDescription" rows="4" placeholder="Nhập mô tả sản phẩm"></textarea>
+            </div>
+
+            <div>
+                <label for="productCategory">Thể loại sản phẩm:</label>
+                <select id="productCategory" name="productCategory">
+                    <option value="1">Chảo</option>
+                    <option value="2">Nồi</option>
+                    <option value="3">Máy hút bụi</option>
+                    <option value="4">Bếp</option>
+                    <option value="5">Máy xay</option>
+                </select>
+            </div>
+
+            <button type="submit">Cập nhật sản phẩm</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch('../header.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('header-container').innerHTML = data;
+
+                    // Load header.js explicitly after header.html is fetched
+                    const script = document.createElement('script');
+                    script.src = '../header.js';
+                    script.onload = () => {
+                        if (typeof initializeHeader === 'function') {
+                            initializeHeader(); // Call the function after header.js is loaded
+                        } else {
+                            console.error("initializeHeader function not found in header.js");
+                        }
+                    };
+                    document.body.appendChild(script);
+
+                    checkAndDisplayProductLink();
+                })
+                .catch(err => console.error("Error loading header.html:", err));
+        });
+    </script>
+
+    <script src="../checkAuth.js"></script>
+    <script src="./editProduct.js"></script>
+    <script src="../check-permission.js"></script>
+
+</body>
+</html>

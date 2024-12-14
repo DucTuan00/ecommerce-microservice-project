@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Đồ Gia Dụng</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to left, #f8e9e8, #e5f6f6, #fff0f5);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0px 50px;
+            background-color: #fff;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-container input[type="text"] {
+            width: 300px;
+            height: 40px;
+            padding: 0 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .search-container input[type="text"]:focus {
+            border-color: #ff6600;
+            outline: none;
+        }
+
+        #search-button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
+        .resert-search-button{
+            padding: 13px 25px;
+            background-color: #f5222d;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .cart-icon {
+            background-color: #f0f0f0;
+            border-radius: 50%;
+            padding: 10px;
+        }
+
+        .hero {
+            display: flex;
+            justify-content: space-between;
+            padding: 50px;
+            background: linear-gradient(to left, #ffe4e1, #e0ffff, #fff0f5);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-text {
+            flex: 1;
+        }
+
+        .hero-text h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .hero-text button {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .hero-images {
+            flex: 1;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .hero-images img {
+            width: 45%;
+            height: auto;
+            object-fit: cover;
+        }
+
+        .category-layout {
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            align-items: flex-start;
+            margin-top: 20px;
+        }
+
+        .category-highlights {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            gap: 8px;
+            width: 80%;
+        }
+
+        .category-card {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        .category-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .category-card .category-title {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            color: white;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .main-content-layout {
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            align-items: flex-start;
+            flex-direction: row;
+        }
+
+        .main-content {
+            display: flex;
+            width: 80%;
+            background-color: #fff;
+            border-radius: 25px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+
+        }
+
+        .products-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 40px 0;
+            width: 75%;
+        }
+
+        .product-item {
+            background-color: #fff;
+            padding: 15px;
+            text-align: center;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .product-item img {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .product-name {
+            font-size: 16px;
+            margin: 10px 0;
+            color: #333;
+        }
+
+        .product-price {
+            color: #ff6600;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .add-product-icon {
+            color: #ff6600;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        .nav-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .categories {
+            display: flex;
+            gap: 20px;
+        }
+
+        .categories a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .categories a:hover,
+        .categories a.active {
+            color: #4CAF50;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-actions a {
+            text-decoration: none;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .header-actions .fa-shopping-cart {
+            font-size: 20px;
+        }
+
+        .logout-btn {
+            padding: 8px 15px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #d32f2f;
+        }
+
+        .section-title {
+            font-size: 2.5em;
+            font-weight: bold;
+            text-align: center;
+            margin: 40px 0 20px 0;
+            color: #333;
+        }
+
+        .category-layout,
+        .main-content-layout {
+            margin-top: 20px;
+        }
+
+        .slideshow-container {
+            width: 100%;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .slideshow {
+            width: 100%;
+            height: 600px;
+            position: relative;
+        }
+
+        .slideshow img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 0;
+            background-color: #fff;
+            margin: 20px 10% 0 10%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 25px;
+        }
+
+        .search-container input[type="text"] {
+            width: 100vh;
+            height: 40px;
+            padding: 0 15px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+            margin-right: 10px;
+        }
+
+        .search-container input[type="text"]:focus {
+            border-color: #ff6600;
+            outline: none;
+        }
+
+        #search-button {
+            padding: 13px 25px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #search-button:hover {
+            background-color: #fa541c;
+        }
+
+        .filter {
+            width: 20%;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 15px 0 0 15px;
+            cursor: pointer;
+        }
+
+        .filter-header {
+            padding: 10px;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .sort-low-to-high,
+        .price-filter,
+        .sort-high-to-low {
+            padding: 10px;
+            margin: 5px;
+            width: 96%;
+            border-radius: 10px;
+            font-size: 16px;
+            text-align: center;
+            border: none;
+            background-color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            align-items: center;
+        }
+
+        .selected-button {
+            background-color: #ff6600;
+            color: white;
+        }
+
+        .sort-reset { 
+            padding: 10px;
+            margin: 5px;
+            width: 96%;
+            border-radius: 10px;
+            font-size: 16px;
+            text-align: center;
+            border: none;
+            background-color: #f44336;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .sort-reset:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+    <script src="https://kit.fontawesome.com/91c8b57a30.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <!-- Placeholder for header -->
+    <div id="header-container"></div>
+
+
+    <div class="hero">
+        <div class="hero-text">
+            <h1>Mua sắm đồ gia dụng chưa bao giờ dễ dàng đến thế</h1>
+            <button style="font-size: 1.5em;">Mua sắm ngay !</button>
+        </div>
+        <div class="hero-images">
+            <img src="../img/pan.png" alt="Chảo">
+            <img src="../img/pot.png" alt="Nồi">
+        </div>
+    </div>
+
+    <!-- <div class="slideshow-container">
+        <div class="slideshow">
+            <img src="https://via.placeholder.com/1200x400.png?text=Tin+Tức+1" alt="Slide 1">
+        </div>
+    </div> -->
+
+
+    <div class="category-layout">
+        <div class="category-highlights">
+            <div class="category-card" data-category-id="1">
+                <img src="../img/pan.png" alt="Kitchen">
+                <div class="category-title">Chảo</div>
+            </div>
+            <div class="category-card" data-category-id="2">
+                <img src="../img/pot.png" alt="Home & Living">
+                <div class="category-title">Nồi</div>
+            </div>
+            <div class="category-card" data-category-id="3">
+                <img src="../img/vacuumCleaner.png" alt="Art & Collectibles">
+                <div class="category-title">Máy hút bụi</div>
+            </div>
+            <div class="category-card" data-category-id="4">
+                <img src="../img/gasStove.png" alt="Art & Collectibles">
+                <div class="category-title">Bếp</div>
+            </div>
+            <div class="category-card" data-category-id="5">
+                <img src="../img/blender.png" alt="Art & Collectibles">
+                <div class="category-title">Máy xay</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="Tìm kiếm sản phẩm...">
+        <button id="search-button">Tìm kiếm</button>
+        <button id="resert-search" class="resert-search-button">Xóa</button>
+    </div>
+
+    <div class="main-content-layout">
+        <div class="main-content">
+            <div class="filter">
+                <div class="filter-header">
+                    <i class="fa-solid fa-sort"></i>&nbsp;Sắp xếp theo giá tiền
+                </div>
+                <br>
+                <button id="sort-high-to-low" class="sort-high-to-low">Cao&nbsp;<i
+                        class="fa-solid fa-arrow-right"></i>&nbsp;Thấp</button>
+                <button id="sort-low-to-high" class="sort-low-to-high">Thấp&nbsp;<i
+                        class="fa-solid fa-arrow-right"></i>&nbsp;Cao</button>
+                <br>
+                <br>
+                <br>
+                <br>
+                <div class="filter-header">
+                    <i class="fa-solid fa-filter"></i>&nbsp;Lọc theo giá tiền
+                </div>
+                <button id="filter-0-1m" class="price-filter">0&nbsp;<i class="fa-solid fa-arrow-right"></i>&nbsp;1
+                    triệu</button>
+                <button id="filter-1m-10m" class="price-filter">1 triệu&nbsp;<i
+                        class="fa-solid fa-arrow-right"></i>&nbsp;10 triệu</button>
+                <button id="filter-10m-plus" class="price-filter">Lớn hơn 10 triệu</button>
+                <br>
+                <br>
+                <br>
+                <br>
+                <button id="reset-sort" class="sort-reset">Bỏ sắp xếp</button>
+            </div>
+            <div class="products-container" id="products-container"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch('../header.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('header-container').innerHTML = data;
+
+                    // Load header.js explicitly after header.html is fetched
+                    const script = document.createElement('script');
+                    script.src = '../header.js';
+                    script.onload = () => {
+                        if (typeof initializeHeader === 'function') {
+                            initializeHeader(); // Call the function after header.js is loaded
+                        } else {
+                            console.error("initializeHeader function not found in header.js");
+                        }
+                    };
+                    document.body.appendChild(script);
+
+                    checkAndDisplayProductLink();
+                })
+                .catch(err => console.error("Error loading header.html:", err));
+        });
+    </script>
+
+    <script src="home.js"></script>
+    <script src="../check-permission.js"></script>
+
+</body>
+
+</html>
