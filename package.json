@@ -7,7 +7,12 @@
     "api-gateway": "cd api-gateway && node server.js",
     "auth-service": "cd auth-service && node server.js",
     "user-service": "cd user-service && node server.js",
-    "start-all": "npm-run-all --parallel api-gateway auth-service user-service"
+    
+    
+    
+    
+    "zalopay-service": "cd zalopay-service && node server.js",
+    "start-all": "npm-run-all --parallel api-gateway auth-service user-service zalopay-service"
   },
   "keywords": [],
   "author": "",
