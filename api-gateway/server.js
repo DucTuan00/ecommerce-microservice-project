@@ -39,6 +39,11 @@ app.use('/api/order', createProxyMiddleware({
     changeOrigin: true,
 }));
 
+app.use('/api/statistical', createProxyMiddleware({ 
+    target: 'http://localhost:3005/api/statistical', 
+    changeOrigin: true,
+}));
+
 app.listen(3000, () => {
     console.log('API Gateway running on http://localhost:3000');
 });

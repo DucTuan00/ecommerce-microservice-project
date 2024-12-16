@@ -14,9 +14,9 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log('userRole:', userRole);
     
         if (userRole === '1') {
-            apiUrl = 'http://localhost:3000/api/orders';
+            apiUrl = 'http://localhost:3000/api/order';
         } else if (userRole === '2') {
-            apiUrl = 'http://localhost:3000/api/orders/getUserOrder';
+            apiUrl = 'http://localhost:3000/api/order/getUserOrder';
         }
     
         console.log('Fetching orders from:', apiUrl);
@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function cancelOrder(orderId) {
-        fetch(`http://localhost:3000/api/orders/cancel/${orderId}`, {
+        fetch(`http://localhost:3000/api/order/cancel/${orderId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

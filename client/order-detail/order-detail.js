@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Hàm gọi API để lấy chi tiết đơn hàng
     function fetchOrderDetails() {
-        fetch(`http://localhost:3000/api/orders/items/${id}`, {
+        fetch(`http://localhost:3000/api/order/items/${id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function updateOrderStatus() {
         const selectedStatus = document.getElementById("orderStatus").value;
 
-        fetch(`http://localhost:3000/api/orders/${id}`, {
+        fetch(`http://localhost:3000/api/order/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     function fetchOrderInfo() {
-        fetch(`http://localhost:3000/api/orders/${id}`, {
+        fetch(`http://localhost:3000/api/order/${id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -113,8 +113,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 return response.json();
             })
             .then(data => {
-                if (Array.isArray(data) && data.length > 0) {
-                    renderOrderInfo(data[0]);
+                if (data) {
+                    renderOrderInfo(data);
                 } else {
                     throw new Error("Không tìm thấy thông tin đơn hàng");
                 }

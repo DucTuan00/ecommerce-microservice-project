@@ -1,3 +1,4 @@
+const { json } = require('express');
 const orderModel = require('../models/orderModel');
 const axios = require('axios');
 
@@ -81,4 +82,177 @@ exports.createOrder = async (req, res) => {
             message: error.response?.data?.message || 'Internal server error'
         });
     }
+};
+
+exports.getUserOrders = async (req, res) => {
+    const user_id = req.userId;
+
+    try {
+        // Lấy danh sách đơn hàng theo user_id
+        orderModel.getOrdersByUserId(user_id, async (err, orders) => {
+            if (err) return res.status(500).json({ message: 'Error fetching orders' });
+
+            //Kiểm tra user tồn tại qua User Service
+            const userResponse = await axios.get(
+                `http://localhost:3002/api/user/getUser/${user_id}`,
+                {
+                    headers: { Authorization: req.headers.authorization } // Forward token từ client
+                }
+            );
+
+            if (userResponse.status !== 200) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+
+            for (const item of orders) {
+                item.username = userResponse.data[0].username;
+            }
+
+            res.status(200).json(orders);
+        });
+    } catch (error) {
+        console.error('Error getting user order:', error.response?.data || error.message);
+        return res.status(error.response?.status || 500).json({
+            message: error.response?.data?.message || 'Internal server error'
+        });
+    }
+};
+
+exports.getAllOrderItemsByOrderId = (req, res) => {
+    const order_id = req.params.id;
+
+    orderModel.getAllOrderItemsByOrderId(order_id, async (err, orderItems) => {
+        if (err) return res.status(500).json({ message: 'Error fetching order items' });
+        if (orderItems.length === 0) return res.status(404).json({ message: 'No order items found' });
+
+        try {
+            // Gửi request tuần tự tới product service
+            for (const item of orderItems) {
+                const productResponse = await axios.get(
+                    `http://localhost:3003/api/product/${item.product_id}`
+                );
+                item.product_name = productResponse.data ? productResponse.data.name : 'Unknown';
+            }
+
+            res.status(200).json(orderItems);
+        } catch (error) {
+            console.error('Error getting all order items:', error.response?.data || error.message);
+            return res.status(error.response?.status || 500).json({
+                message: error.response?.data?.message || 'Internal server error'
+            });
+        }
+    });
+};
+
+exports.getOrderById = (req, res) => {
+    const id = req.params.id;
+
+    try {
+        orderModel.getOrderById(id, async (err, order) => {
+            if (err) return res.status(500).json({message: 'Cannot get order'});
+            
+            order = order[0];
+            const user_id = order.user_id;
+
+            //Kiểm tra user tồn tại qua User Service
+            const userResponse = await axios.get(
+                `http://localhost:3002/api/user/getUser/${user_id}`,
+                {
+                    headers: { Authorization: req.headers.authorization } // Forward token từ client
+                }
+            );
+
+            if (userResponse.status !== 200) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+
+            order.username = userResponse.data ? userResponse.data[0].username : 'Unknown';
+
+            res.status(200).json(order);
+        });
+    } catch (error) {
+        console.error('Error getting order:', error.response?.data || error.message);
+        return res.status(error.response?.status || 500).json({
+            message: error.response?.data?.message || 'Internal server error'
+        });
+    }
+};
+
+exports.updateOrderStatus = (req, res) => {
+    const orderId = req.params.id;
+    const { status } = req.body;
+
+    orderModel.updateOrderStatus(orderId, status, (err, result) => {
+        if (err) return res.status(500).json({ message: 'Error updating order status' });
+        if (result.affectedRows === 0) return res.status(404).json({ message: 'Order not found' });
+        res.status(200).json({ message: 'Order status updated successfully' });
+    });
+};
+
+exports.getAllOrders = (req, res) => {
+    orderModel.getAllOrders(async (err, orders) => {
+        if (err) {
+            console.error('Error fetching all orders:', err);
+            return res.status(500).json({ message: 'Error fetching orders' });
+        }
+
+        //Kiểm tra user tồn tại qua User Service
+        const userResponse = await axios.get(
+            `http://localhost:3002/api/user/allUser`,
+            {
+                headers: { Authorization: req.headers.authorization } // Forward token từ client
+            }
+        );
+
+        if (userResponse.status !== 200) {
+            return res.status(404).json({ message: 'Users not found' });
+        }
+
+        const users = userResponse.data;
+
+        const ordersWithUsernames = orders.map(order => {
+            // Tìm người dùng tương ứng với user_id của đơn hàng
+            const user = users.find(u => u.id === order.user_id);
+            
+            // Tạo một đối tượng mới với tất cả các trường của order và thêm trường username
+            const orderWithUsername = {
+                id: order.id,
+                user_id: order.user_id,
+                phone_number: order.phone_number,
+                address: order.address,
+                total_amount: order.total_amount,
+                status: order.status,
+                created_at: order.created_at,
+                username: user ? user.username : 'Unknown'
+            };
+        
+            return orderWithUsername;
+        });
+
+        res.status(200).json(ordersWithUsernames);
+    });
+};
+
+exports.cancelOrder = (req, res) => {
+    const order_id = req.params.order_id;
+    console.log(order_id);
+    // Kiểm tra trạng thái của đơn hàng trước khi xóa
+    orderModel.getOrderById(order_id, (err, orderResult) => {
+        if (err) return res.status(500).json({ message: 'Error fetching order' });
+        if (!orderResult) return res.status(404).json({ message: 'Order not found' });
+
+        const order = orderResult[0];
+        console.log(order.status);
+        // Kiểm tra trạng thái đơn hàng
+        if (order.status !== 'pending') {
+            return res.status(400).json({ message: 'Only pending orders can be deleted' });
+        }
+
+        // Nếu trạng thái là pending, tiến hành xóa
+        orderModel.cancelOrder(order_id, (err) => {
+            if (err) return res.status(500).json({ message: 'Error deleting order' });
+
+            res.status(200).json({ message: 'Order canceled successfully' });
+        });
+    });
 };
