@@ -256,3 +256,30 @@ exports.cancelOrder = (req, res) => {
         });
     });
 };
+
+exports.payOrder = async (req, res) => {
+    const { order_id } = req.body;
+
+    try {
+        orderModel.getOrderById(order_id, async (err, order) => {
+            if (err) return res.status(500).json({message: 'Cannot get order'});
+
+            order = order[0];
+
+            // Logic thanh toán (API ZaloPay)
+            const paymentResponse = await axios.post('http://localhost:3006/api/payment', {
+                order_id: order.id,
+                amount: order.total_amount,
+            });
+
+            return res.json({
+                message: 'Payment initialized successfully',
+                payment_link: paymentResponse.data.order_url,
+                order
+            });
+        });
+    } catch (error) {
+        console.error('Error in payment process:', error.message || error);
+        return res.status(error.status || 500).json({ message: error.message || 'Internal server error' });
+    }
+};

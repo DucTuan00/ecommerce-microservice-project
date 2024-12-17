@@ -181,6 +181,46 @@
             background-color: #218838;
         }
 
+        .payment-btn {
+            background-color: #ff6600; 
+            color: white; 
+            padding: 12px 20px; 
+            font-size: 16px; 
+            font-weight: bold; 
+            border: none; 
+            border-radius: 5px;
+            cursor: pointer; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease; 
+            display: block;
+            margin: 30px auto 0;
+        }
+
+        .payment-btn:hover {
+            background-color: #e55a00; 
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); 
+        }
+
+        .order-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Chia thành 2 cột */
+            gap: 15px 30px; /* Khoảng cách giữa các ô */
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .order-info-grid p {
+            margin: 10px;
+            font-size: 16px;
+        }
+
+        .order-info-grid strong {
+            color: #555;
+        }
+
     </style>
 </head>
 
@@ -190,8 +230,8 @@
 
     <div class="container">
         <h1>Chi Tiết Đơn Hàng</h1>
+        <div id="order-details-container" class="order-info-grid"></div>
 
-        <div id="order-details-container"></div>
 
         <!-- Bảng sản phẩm trong đơn hàng -->
         <table>
@@ -199,13 +239,15 @@
                 <tr>
                     <th>Tên sản phẩm</th>
                     <th>Số lượng</th>
-                    <th>Thành tiền</th>
+                    <th>Giá tiền</th>
                 </tr>
             </thead>
             <tbody id="productTableBody">
                 <!-- Sản phẩm sẽ được chèn vào đây -->
             </tbody>
         </table>
+
+        <button id="payment-button" class="payment-btn">Thanh toán</button>
 
         <!-- Chọn trạng thái đơn hàng -->
         <div class="status-select">

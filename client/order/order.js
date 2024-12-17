@@ -131,7 +131,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 alert('Hủy đơn hàng thành công');
                 fetchOrders(); // Refresh the order list
             } else {
-                alert('Hủy đơn hàng thất bại vì đơn hàng đang giao hoặc đã được giao!');
+                alert('Không thể hủy vì đơn hàng đã được xử lý!');
             }
         })
         .catch(error => {
@@ -146,6 +146,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 return 'Chờ xử lý';
             case 'shipping':
                 return 'Đang giao hàng';
+            case 'paid':
+                return 'Đã thanh toán';
             case 'completed':
                 return 'Đã giao';
             case 'canceled':

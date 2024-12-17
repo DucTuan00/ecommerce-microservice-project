@@ -108,7 +108,7 @@ async function createCart(product_id, quantity) {
             alert("Đã thêm vào giỏ hàng");
         } else {
             const errorData = await response.json();
-            alert(`Admin không thể thêm sản phẩm vào giỏ hàng`);
+            alert(`Vui lòng đăng nhập để thêm vào giỏ hàng!`);
         }
     } catch (error) {
         console.log('Lỗi khi thêm vào giỏ hàng', error);
