@@ -6,275 +6,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chi Tiết Đơn Hàng</title>
     <script src="https://kit.fontawesome.com/91c8b57a30.js" crossorigin="anonymous"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(to left, #f8e9e8, #e5f6f6, #fff0f5);
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 50px;
-            background-color: #fff;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .search-container {
-            display: flex;
-            align-items: center;
-        }
-
-        .search-container input[type="text"] {
-            width: 300px;
-            height: 40px;
-            padding: 0 15px;
-            border: 1px solid #ddd;
-            border-radius: 20px;
-            font-size: 14px;
-            transition: border-color 0.3s;
-        }
-
-        .search-container input[type="text"]:focus {
-            border-color: #ff6600;
-            outline: none;
-        }
-
-        #search-button {
-            padding: 10px 20px;
-            background-color: #333;
-            color: white;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            margin-left: 10px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 20px;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: #333;
-        }
-
-        .cart-icon {
-            background-color: #f0f0f0;
-            border-radius: 50%;
-            padding: 10px;
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .header-actions a {
-            text-decoration: none;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .header-actions .fa-shopping-cart {
-            font-size: 20px;
-        }
-
-        /* Categories */
-        .categories {
-            display: flex;
-            justify-content: space-around;
-            padding: 15px 0;
-            background-color: #fff;
-        }
-
-        .categories a {
-            text-decoration: none;
-            color: #333;
-            padding: 5px 10px;
-            transition: color 0.3s ease;
-        }
-
-        .categories a.active {
-            color: #ff6600;
-            border-bottom: 2px solid #ff6600;
-        }
-
-        .container {
-            width: 60%;
-            margin: 40px auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            color: #ff416c;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-        }
-
-        th, td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #f7f7f7;
-            font-weight: bold;
-        }
-
-        tbody tr:hover {
-            background-color: #f1f1f1;
-        }
-
-        .status-select {
-            margin-top: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .status-select label {
-            font-weight: bold;
-        }
-
-        .status-select select {
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        .update-btn {
-            background-color: #28a745;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 5px;
-            text-align: center;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            font-size: 16px;
-        }
-
-        .update-btn:hover {
-            background-color: #218838;
-        }
-
-        .payment-btn {
-            background-color: #ff6600; 
-            color: white; 
-            padding: 12px 20px; 
-            font-size: 16px; 
-            font-weight: bold; 
-            border: none; 
-            border-radius: 5px;
-            cursor: pointer; 
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease; 
-            display: block;
-            margin: 30px auto 0;
-        }
-
-        .payment-btn:hover {
-            background-color: #e55a00; 
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); 
-        }
-
-        .order-info-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr; /* Chia thành 2 cột */
-            gap: 15px 30px; /* Khoảng cách giữa các ô */
-            margin-top: 20px;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 5px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .order-info-grid p {
-            margin: 10px;
-            font-size: 16px;
-        }
-
-        .order-info-grid strong {
-            color: #555;
-        }
-
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./order-detail.css">
 </head>
 
 <body>
     <!-- Placeholder for header -->
     <div id="header-container"></div>
 
-    <div class="container">
-        <h1>Chi Tiết Đơn Hàng</h1>
-        <div id="order-details-container" class="order-info-grid"></div>
-
-
-        <!-- Bảng sản phẩm trong đơn hàng -->
-        <table>
-            <thead>
-                <tr>
-                    <th>Tên sản phẩm</th>
-                    <th>Số lượng</th>
-                    <th>Giá tiền</th>
-                </tr>
-            </thead>
-            <tbody id="productTableBody">
-                <!-- Sản phẩm sẽ được chèn vào đây -->
-            </tbody>
-        </table>
-
-        <button id="payment-button" class="payment-btn">Thanh toán</button>
-
-        <!-- Chọn trạng thái đơn hàng -->
-        <div class="status-select">
-            <select id="orderStatus">
-                <option value="pending">Chờ xử lý</option>
-                <option value="shipping">Đang giao</option>
-                <option value="completed">Đã giao</option>
-                <option value="canceled">Đã hủy</option>
-            </select>
-        </div>
-
-        <!-- Nút cập nhật trạng thái -->
-        <div class="status-select">
-            <button class="update-btn" id="updateStatusBtn">Cập nhật trạng thái</button>
+    <div class="container mb-5">
+        <div class="order-detail-container">
+            <h2 class="text-center mb-4">Chi Tiết Đơn Hàng</h2>
+            <div id="order-details-container" class="order-info-grid"></div>
+            <!-- Bảng sản phẩm trong đơn hàng -->
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Tên sản phẩm</th>
+                            <th>Số lượng</th>
+                            <th>Giá tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productTableBody">
+                        <!-- Sản phẩm sẽ được chèn vào đây -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Chọn trạng thái đơn hàng -->
+            <div class="status-select d-flex justify-content-between align-items-center">
+                <select id="orderStatus" class="form-select justify-content-between align-items-center">
+                    <option value="pending" disabled>Chờ xử lý</option>
+                    <option value="paid" disabled>Đã thanh toán</option>
+                    <option value="shipping">Đang giao</option>
+                    <option value="completed">Đã giao</option>
+                    <option value="canceled">Đã hủy</option>
+                </select>
+            </div>
+            
+            <!-- Nút cập nhật trạng thái -->
+            <div class="text-center mt-3">
+                <button class="update-btn btn btn-success" id="updateStatusBtn">Cập nhật trạng thái</button>
+            </div>
         </div>
     </div>
 
+    <div id="footer-container"></div>
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            fetch('../header.html')
+            fetch('../header/header.html')
                 .then(response => response.text())
                 .then(data => {
                     document.getElementById('header-container').innerHTML = data;
 
                     // Load header.js explicitly after header.html is fetched
                     const script = document.createElement('script');
-                    script.src = '../header.js';
+                    script.src = '../header/header.js';
                     script.onload = () => {
                         if (typeof initializeHeader === 'function') {
                             initializeHeader(); // Call the function after header.js is loaded
@@ -293,6 +82,7 @@
     <script src="../checkAuth.js"></script>
     <script src="../check-permission.js"></script>
     <script src="./order-detail.js"></script>
+    <script src="../footer/footer.js"></script>
 </body>
 
 </html>

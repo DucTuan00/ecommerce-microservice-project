@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", function () {
     function checkUserRole() {
         const statusSelect = document.getElementById("orderStatus");
         const updateStatusBtn = document.getElementById("updateStatusBtn");
-        const paymentBtn = document.getElementById("payment-button");
 
         if (userRole !== '1') { // Nếu userRole không phải là admin (khác 1), ẩn select và nút cập nhật
             statusSelect.style.display = "none";
@@ -19,7 +18,6 @@ document.addEventListener("DOMContentLoaded", function () {
         } else { // Nếu là admin (userRole = 1), hiển thị select và nút cập nhật
             statusSelect.style.display = "inline-block";
             updateStatusBtn.style.display = "inline-block";
-            paymentBtn.style.display = "none";
         }
     }
 
@@ -148,78 +146,14 @@ document.addEventListener("DOMContentLoaded", function () {
         // Set nội dung cho container
         orderDetailsContainer.innerHTML = orderInfoHTML;
 
-        // Gắn sự kiện cho nút thanh toán
-        const paymentButton = document.getElementById("payment-button");
-        paymentButton.addEventListener("click", () => handlePayment(orderData.id));
-
         // Cập nhật trạng thái
         const statusSelect = document.getElementById("orderStatus");
         statusSelect.value = orderData.status;
     }
 
-    // Hàm xử lý gọi api thanh toán
-    async function handlePayment(orderId) {
-        try {
-            const response = await fetch("http://localhost:3000/api/order/payment", {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({ order_id: orderId }) // Gửi order_id qua API
-            });
     
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || "Thanh toán thất bại");
-            }
+
     
-            const responseData = await response.json();
-    
-            // Xử lý kết quả trả về từ API (ví dụ: link thanh toán từ ZaloPay)
-            if (responseData.payment_link) {
-                window.location.href = responseData.payment_link; // Chuyển hướng tới link thanh toán
-            } else {
-                alert("Thanh toán thành công!"); // Hoặc xử lý theo yêu cầu
-            }
-        } catch (error) {
-            console.error("Lỗi thanh toán:", error.message);
-            alert("Thanh toán thất bại: " + error.message);
-        }
-    }
-
-    //lấy ra 2 thuộc tính trong url để kiểm tra, sau đó thay đổi trạng thái
-    const paymentStatus = urlParams.get('paymentStatus'); // Lấy trạng thái thanh toán
-    const order_id = urlParams.get('id'); // Lấy id đơn hàng
-
-    if (paymentStatus === 'success' && order_id) {
-        updateOrderStatusToPaid(order_id);
-    }
-
-    function updateOrderStatusToPaid(orderId) {
-        fetch(`http://localhost:3000/api/order/${orderId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ status: 'paid' }) // Cập nhật trạng thái thành 'paid'
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Không thể cập nhật trạng thái đơn hàng");
-            }
-            return response.json();
-        })
-        .then(data => {
-            alert("Thanh toán thành công và trạng thái đơn hàng đã được cập nhật!");
-            fetchOrderInfo(); // Gọi lại hàm để render thông tin đơn hàng
-        })
-        .catch(error => {
-            console.error("Lỗi cập nhật trạng thái thanh toán:", error);
-            alert("Có lỗi xảy ra khi cập nhật trạng thái đơn hàng.");
-        });
-    }
 
     // Hàm xử lý trạng thái đơn hàng
     function renderOrderStatus(status) {

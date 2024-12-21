@@ -42,7 +42,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (orders.length === 0) {
                     console.warn('No orders found.');
                 } else {
-                    allOrders = orders; // Store all orders
+                    // Sắp xếp đơn hàng theo ngày đặt hàng (mới nhất trước)
+                    allOrders = orders.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
                     renderOrderTable();  // Render first page
                     renderPagination();  // Render pagination
                 }
@@ -75,12 +76,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 <td>${renderOrderStatus(order.status)}</td>
                 <td class="actions-btn">
                     ${userRole === '1' ? `
-                        <a href="../order-detail/order-detail.html?id=${order.id}" class="edit-btn"><i class="fas fa-edit"></i></a>
-                        <button class="cancel-btn" data-id="${order.id}"><i class="fas fa-ban"></i></button>
+                        <a href="../order-detail/order-detail.html?id=${order.id}" class="edit-btn btn btn-primary btn-sm"><i class="fas fa-edit"></i></a>
+                        <button class="cancel-btn btn btn-danger btn-sm" data-id="${order.id}"><i class="fas fa-ban"></i></button>
                     ` : ''}
                     ${userRole === '2' ? `
-                        <a href="../order-detail/order-detail.html?id=${order.id}" class="edit-btn"><i class="fas fa-eye"></i></a>
-                        <button class="cancel-btn" data-id="${order.id}"><i class="fas fa-ban"></i></button>
+                        <a href="../order-detail/order-detail.html?id=${order.id}" class="edit-btn btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
+                        <button class="cancel-btn btn btn-danger btn-sm" data-id="${order.id}"><i class="fas fa-ban"></i></button>
                     ` : ''}
                 </td>
             `;
@@ -104,18 +105,28 @@ document.addEventListener("DOMContentLoaded", function () {
         paginationContainer.innerHTML = '';
 
         const totalPages = Math.ceil(allOrders.length / itemsPerPage);
+        const ul = document.createElement('ul');
+        ul.classList.add('pagination');
+
 
         for (let i = 1; i <= totalPages; i++) {
+            const li = document.createElement('li');
+            li.classList.add('page-item');
+            if (i === currentPage) {
+              li.classList.add('active');
+            }
             const button = document.createElement('button');
             button.textContent = i;
-            button.classList.toggle('active', i === currentPage);
+            button.classList.add('page-link')
             button.addEventListener('click', () => {
                 currentPage = i;
                 renderOrderTable();
                 renderPagination();
             });
-            paginationContainer.appendChild(button);
+            li.appendChild(button)
+            ul.appendChild(li);
         }
+        paginationContainer.appendChild(ul);
     }
 
     function cancelOrder(orderId) {
@@ -137,6 +148,40 @@ document.addEventListener("DOMContentLoaded", function () {
         .catch(error => {
             console.error('Lỗi khi hủy đơn hàng:', error);
             alert('Đã xảy ra lỗi khi hủy đơn hàng');
+        });
+    }
+
+    //lấy ra 2 thuộc tính trong url để kiểm tra, sau đó thay đổi trạng thái
+    const urlParams = new URLSearchParams(window.location.search);
+    const paymentStatus = urlParams.get('paymentStatus'); // Lấy trạng thái thanh toán
+    const order_id = urlParams.get('id'); // Lấy id đơn hàng
+
+    if (paymentStatus === 'success' && order_id) {
+        updateOrderStatusToPaid(order_id);
+    }
+
+    function updateOrderStatusToPaid(orderId) {
+        fetch(`http://localhost:3000/api/order/${orderId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${Token}`
+            },
+            body: JSON.stringify({ status: 'paid' }) // Cập nhật trạng thái thành 'paid'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Không thể cập nhật trạng thái đơn hàng");
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert("Thanh toán thành công!");
+            fetchOrders(); // Gọi lại hàm để render thông tin đơn hàng
+        })
+        .catch(error => {
+            console.error("Lỗi cập nhật trạng thái thanh toán:", error);
+            alert("Có lỗi xảy ra khi cập nhật trạng thái đơn hàng.");
         });
     }
     
@@ -162,9 +207,10 @@ document.addEventListener("DOMContentLoaded", function () {
         allOrders.sort((a, b) => {
             const statusOrder = {
                 'pending': 1,
-                'shipping': 2,
-                'completed': 3,
-                'canceled': 4
+                'paid': 2,
+                'shipping': 3,
+                'completed': 4,
+                'canceled': 5
             };
             return statusOrder[a.status] - statusOrder[b.status];
         });

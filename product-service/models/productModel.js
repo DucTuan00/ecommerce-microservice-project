@@ -12,6 +12,10 @@ const getProductById = (product_id, callback) => {
     });
 };
 
+const getProductsByCategory = (category_id, callback) => {
+    db.query('SELECT * FROM products WHERE category_id = ?', [category_id], callback);
+}
+
 // Thêm sản phẩm mới
 const createProduct = (name, price, image, description, category_id, quantity, active, callback) => {
     db.query('INSERT INTO products (name, price, image, description, category_id, quantity, active) VALUES (?, ?, ?, ?, ?, ?, ?)', 
@@ -54,6 +58,7 @@ const updateProductQuantity = (product_id, quantity, callback) => {
 module.exports = {
     getAllProducts,
     getProductById,
+    getProductsByCategory,
     createProduct,
     updateProduct,
     deleteProduct,

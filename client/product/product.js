@@ -73,23 +73,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
         productsToShow.forEach(product => {
             if (product.active === 1) {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td class="select-product">
-                        <input type="radio" name="selectProduct" class="select-item" value="${product.id}">
-                    </td>
-                    <td class="actions-btn">
-                        <a href="../editProduct/editProduct.html?id=${product.id}" class="edit-btn">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                    </td>
-                    <td>${product.name}</td>
-                    <td>${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}</td>
-                    <td>${getCategoryName(product.category_id)}</td>
-                    <td>${product.quantity}</td>
-                    <td>${product.description}</td>
-                `;
-                productTableBody.appendChild(row);
+              const row = productTableBody.insertRow();
+                const radioCell = row.insertCell();
+                const editCell = row.insertCell();
+                const nameCell = row.insertCell();
+                const priceCell = row.insertCell();
+                const categoryCell = row.insertCell();
+                const quantityCell = row.insertCell();
+                const descriptionCell = row.insertCell();
+              
+                radioCell.className = 'select-product';
+                editCell.className = 'actions-btn';
+                radioCell.innerHTML = `<input type="radio" name="selectProduct" class="select-item" value="${product.id}">`;
+                 editCell.innerHTML = `<a href="../editProduct/editProduct.html?id=${product.id}" class="edit-btn btn btn-primary btn-sm"><i class="fas fa-edit"></i></a>`;
+                nameCell.textContent = product.name;
+                priceCell.textContent = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price);
+                categoryCell.textContent = getCategoryName(product.category_id);
+                quantityCell.textContent = product.quantity;
+                descriptionCell.textContent = product.description;
             }
         });
 
@@ -97,9 +98,23 @@ document.addEventListener('DOMContentLoaded', function () {
         const radioButtons = document.querySelectorAll('.select-item');
         radioButtons.forEach(radio => {
             radio.addEventListener('change', function () {
-                selectedProductId = this.value;
-                console.log("Selected Product ID:", selectedProductId);
-                deleteButton.disabled = false;
+                if (this.checked) {
+                    // Bỏ chọn tất cả các radio button khác
+                    radioButtons.forEach(otherRadio => {
+                      if (otherRadio !== this) {
+                        otherRadio.checked = false;
+                      }
+                    });
+          
+                    // Cập nhật ID sản phẩm được chọn
+                    selectedProductId = this.value;
+                    console.log("Selected Product ID:", selectedProductId);
+                    deleteButton.disabled = false;
+                  } else {
+                    // Nếu radio button này bị bỏ chọn, vô hiệu hóa nút xóa
+                    selectedProductId = null;
+                    deleteButton.disabled = true;
+                  }
             });
         });
     }
@@ -112,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function () {
         for (let i = 1; i <= totalPages; i++) {
             const pageButton = document.createElement('button');
             pageButton.textContent = i;
-            pageButton.classList.add('page-btn');
+            pageButton.classList.add('page-btn', 'btn', 'btn-light');
             if (i === currentPage) {
                 pageButton.classList.add('active');
             }
@@ -129,7 +144,10 @@ document.addEventListener('DOMContentLoaded', function () {
     function updateActivePagination() {
         const pageButtons = document.querySelectorAll('.page-btn');
         pageButtons.forEach((button, index) => {
-            button.classList.toggle('active', index + 1 === currentPage);
+             button.classList.remove('active');
+            if (index + 1 === currentPage) {
+                button.classList.add('active');
+            }
         });
     }
 

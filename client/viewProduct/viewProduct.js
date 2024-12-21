@@ -13,7 +13,7 @@ async function fetchCategoryDetails(categoryId) {
         console.log(category);
 
         // Cập nhật nội dung HTML với dữ liệu từ API
-        document.querySelector('.product-category').textContent = `Thể loại: ${category.name}`;
+        document.querySelector('.product-category').textContent = `Danh mục: ${category.name}`;
     } catch (error) {
         console.error('Error fetching category details:', error);
         // Hiển thị thông báo lỗi (nếu có)
@@ -31,24 +31,22 @@ async function fetchProductDetails() {
         console.log(product);
 
         // Cập nhật nội dung HTML với dữ liệu từ API
-        document.querySelector('.product-name').textContent = `Tên sản phẩm: ${product.name}`;
+        document.querySelector('.product-name').textContent = `${product.name}`;
         document.querySelector('.product-price').textContent = `Giá: ${product.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}`;
         document.querySelector('.product-description').textContent = `Mô tả: ${product.description}`;
         document.querySelector('.product-quantity').textContent = `Số lượng còn trong kho: ${product.quantity}`;
         
         // Gọi hàm để lấy thông tin thể loại sản phẩm
         fetchCategoryDetails(product.category_id).then((category) => {
-            document.querySelector('.product-category').textContent = `Thể loại: ${category.name}`;
+            if (category) {
+                document.querySelector('.product-category').textContent = `Thể loại: ${category.name}`;
+            }
         });
-        
-        document.querySelector('.product-category').textContent = `Thể loại: ${product.category_id}`;
 
         // Cập nhật hình ảnh nếu có
-        const productImage = document.querySelector('.product-image img');
+        const productImage = document.querySelector('.product-image');
         productImage.src = `../../product-service/${product.image}`;
         productImage.alt = product.name;
-        productImage.style.width = '400px';
-        productImage.style.height = '400px';
 
             // Add event listeners for quantity increment/decrement and Add to Cart button
             const quantityInput = document.querySelector('.quantity-input');
@@ -78,9 +76,85 @@ async function fetchProductDetails() {
             
                 createCart(product.id, quantity);
             });
+
+            // Gọi hàm để lấy và hiển thị sản phẩm liên quan
+            fetchRelatedProducts(product.category_id);
+
     } catch (error) {
         console.error('Error fetching product details:', error);
     }
+}
+
+// Hàm gọi API để lấy sản phẩm liên quan
+async function fetchRelatedProducts(categoryId) {
+    try {
+        const response = await fetch(`http://localhost:3000/api/product/category?category_id=${categoryId}`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch related products');
+        }
+        const products = await response.json();
+        renderRelatedProducts(products);
+    } catch (error) {
+        console.error('Error fetching related products:', error);
+    }
+}
+
+// Hàm hiển thị sản phẩm liên quan
+function renderRelatedProducts(products) {
+    const relatedProductsList = document.querySelector('.related-products-list');
+    relatedProductsList.innerHTML = '';
+    let currentIndex = 0;
+    const productsPerView = 5; // Số sản phẩm hiển thị mỗi lần
+
+    products.forEach(product => {
+        if (product.id == productId) return;
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <a href="viewProduct.html?id=${product.id}" class="d-block">
+                <img src="../../product-service/${product.image}" class="card-img-top" alt="${product.name}">
+            </a>
+            <div class="card-body">
+                <a href="viewProduct.html?id=${product.id}"><h6 class="card-title">${product.name}</h6></a>
+                <p class="card-text text-danger fw-bold">${product.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+            </div>
+        `;
+        relatedProductsList.appendChild(card);
+    });
+
+    const updateSlider = () => {
+        const firstCard = relatedProductsList.querySelector('.card');
+        if (!firstCard) {
+            console.error("No cards found in the related products list.");
+            return;
+        }
+
+        let cardWidth = firstCard.offsetWidth + parseInt(getComputedStyle(firstCard).marginRight);
+        const translateX = -currentIndex * cardWidth;
+        relatedProductsList.style.transform = `translateX(${translateX}px)`;
+        prevButton.disabled = currentIndex === 0;
+        nextButton.disabled = currentIndex >= products.length - productsPerView;
+    };
+
+    const prevButton = document.querySelector('.prev-related-products');
+    const nextButton = document.querySelector('.next-related-products');
+
+    prevButton.addEventListener('click', () => {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateSlider();
+        }
+    });
+
+    nextButton.addEventListener('click', () => {
+        if (currentIndex < products.length - productsPerView) {
+            currentIndex++;
+            updateSlider();
+        }
+    });
+
+    updateSlider();
+    window.addEventListener('resize', updateSlider);
 }
 
 // Lấy token từ cookie

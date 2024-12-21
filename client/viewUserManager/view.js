@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
         for (let i = 1; i <= totalPages; i++) {
             const pageButton = document.createElement('button');
             pageButton.textContent = i;
-            pageButton.classList.add('page-btn');
+            pageButton.classList.add('page-btn', 'btn', 'btn-light');
             if (i === currentPage) {
                 pageButton.classList.add('active');
             }
@@ -101,7 +101,10 @@ document.addEventListener('DOMContentLoaded', function () {
     function updateActivePagination() {
         const pageButtons = document.querySelectorAll('.page-btn');
         pageButtons.forEach((button, index) => {
-            button.classList.toggle('active', index + 1 === currentPage);
+            button.classList.remove('active');
+            if (index + 1 === currentPage) {
+                button.classList.add('active');
+            }
         });
     }
 
@@ -114,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(response => response.json())
             .then(data => {
-                alert("Xóa sản phẩm thành công");
+                alert("Xóa người dùng thành công");
                 fetchProducts();
             })
             .catch(error => {

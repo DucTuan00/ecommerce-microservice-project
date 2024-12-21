@@ -39,7 +39,7 @@ document.getElementById('addProductForm').addEventListener('submit', async funct
 
         if (response.ok) {
             const result = await response.json();
-            // alert('Thêm sản phẩm thành công');
+            alert('Thêm sản phẩm thành công');
             window.location.href = '../product/product.html'; 
             // Xử lý điều hướng hoặc cập nhật UI nếu cần
         } else {

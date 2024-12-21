@@ -209,9 +209,40 @@ document.querySelector('.cart-items').addEventListener('click', (event) => {
     }
 });
 
+// Hàm xử lý gọi api thanh toán
+async function handlePayment(orderId) {
+    try {
+        const response = await fetch("http://localhost:3000/api/order/payment", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${Token}`
+            },
+            body: JSON.stringify({ order_id: orderId }) // Gửi order_id qua API
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Thanh toán thất bại");
+        }
+
+        const responseData = await response.json();
+        // Xử lý kết quả trả về từ API (ví dụ: link thanh toán từ ZaloPay)
+        if (responseData.payment_link) {
+            window.location.href = responseData.payment_link; // Chuyển hướng tới link thanh toán
+        } else {
+            alert("Thanh toán thành công!"); // Hoặc xử lý theo yêu cầu
+        }
+    } catch (error) {
+        console.error("Lỗi thanh toán:", error.message);
+        alert("Thanh toán thất bại: " + error.message);
+    }
+}
+
 async function createOrder() {
     const phone = document.getElementById('phone').value;
     const address = document.getElementById('address').value;
+    const isZaloPay = document.getElementById('zalopay').checked; // Kiểm tra xem ZaloPay có được chọn không
     
     if (!phone || !address) {
         alert('Vui lòng nhập đầy đủ số điện thoại và địa chỉ.');
@@ -258,7 +289,14 @@ async function createOrder() {
             }
 
             throw new Error('Không thể tạo đơn hàng');
+        }
 
+        const orderData = await response.json(); // Nhận order data trả về, bao gồm order ID
+        console.log(orderData.order_id);
+
+        if (isZaloPay) {
+            // Xử lý thanh toán ZaloPay
+            handlePayment(orderData.order_id); // Truyền order ID vào hàm handlePayment
         } else {
             alert('Đặt hàng thành công!');
             window.location.href = '/client/order/order.html';
@@ -268,11 +306,23 @@ async function createOrder() {
     }
 }
 
-document.querySelector('.create-order').addEventListener('click', (event) => {
-    //Không cho thẻ <a> thực hiện chuyển hướng mặc định
-    event.preventDefault();
-    createOrder();
-})
+// Gắn sự kiện cho nút đặt hàng
+document.addEventListener('DOMContentLoaded', () => {
+    const orderButton = document.getElementById('order-button');
 
-// Khởi tạo giỏ hàng khi trang được tải
-document.addEventListener('DOMContentLoaded', fetchCart);
+    // Gắn sự kiện click cho nút "Đặt hàng"
+    orderButton.addEventListener('click', () => {
+        createOrder();
+    });
+
+    fetchCart();
+});
+
+// document.querySelector('.create-order').addEventListener('click', (event) => {
+//     //Không cho thẻ <a> thực hiện chuyển hướng mặc định
+//     event.preventDefault();
+//     createOrder();
+// })
+
+// // Khởi tạo giỏ hàng khi trang được tải
+// document.addEventListener('DOMContentLoaded', fetchCart);

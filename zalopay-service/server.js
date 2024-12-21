@@ -33,7 +33,7 @@ app.post('/api/payment', async (req, res) => {
     app_time: Date.now(), // miliseconds
     amount,
     embed_data: JSON.stringify(
-      { redirecturl: `http://127.0.0.1:5500/client/order-detail/order-detail.html?paymentStatus=success&id=${order_id}` }
+      { redirecturl: `http://127.0.0.1:5500/client/order/order.html?paymentStatus=success&id=${order_id}` }
     ),
     item: "[]",
     callback_url: 'http://localhost:3006/api/callback',

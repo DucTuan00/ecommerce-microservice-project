@@ -17,6 +17,14 @@ exports.getProductById = (req, res) => {
     });
 }
 
+exports.getProductsByCategory = (req, res) => {
+    const category_id = req.query.category_id;
+    productModel.getProductsByCategory(category_id, (err, products) => {
+        if (err) return res.status(500).json({ message: 'Error fetching products by category' });
+        res.json(products);
+    });
+}
+
 // Thêm sản phẩm
 exports.createProduct = (req, res) => {
     const { name, price, description, category_id, quantity } = req.body;

@@ -6,282 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản lý Sản Phẩm</title>
     <script src="https://kit.fontawesome.com/91c8b57a30.js" crossorigin="anonymous"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(to left, #f8e9e8, #e5f6f6, #fff0f5);
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 50px;
-            background-color: #fff;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .search-container {
-            display: flex;
-            align-items: center;
-        }
-
-        .search-container input[type="text"] {
-            width: 300px;
-            height: 40px;
-            padding: 0 15px;
-            border: 1px solid #ddd;
-            border-radius: 20px;
-            font-size: 14px;
-            transition: border-color 0.3s;
-        }
-
-        .search-container input[type="text"]:focus {
-            border-color: #ff6600;
-            outline: none;
-        }
-
-        #search-button {
-            padding: 10px 20px;
-            background-color: #333;
-            color: white;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            margin-left: 10px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 20px;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: #333;
-        }
-
-        .cart-icon {
-            background-color: #f0f0f0;
-            border-radius: 50%;
-            padding: 10px;
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .header-actions a {
-            text-decoration: none;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .header-actions .fa-shopping-cart {
-            font-size: 20px;
-        }
-
-        /* Categories */
-        .categories {
-            display: flex;
-            justify-content: space-around;
-            padding: 15px 0;
-            background-color: #fff;
-        }
-
-        .categories a {
-            text-decoration: none;
-            color: #333;
-            padding: 5px 10px;
-            transition: color 0.3s ease;
-        }
-
-        .categories a.active {
-            color: #ff6600;
-            border-bottom: 2px solid #ff6600;
-        }
-
-        .container {
-            width: 60%;
-            height: 79vh;
-            margin: 40px auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            color: #ff416c;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .add-product-btn,
-        .delete-selected-btn {
-            display: inline-block;
-            width: 80px;
-            margin: 5px;
-            padding: 5px;
-            background-color: #28a745;
-            color: white;
-            border-radius: 5px;
-            text-align: center;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
-
-        .add-product-btn:hover {
-            background-color: #218838;
-        }
-
-        .delete-selected-btn {
-            background-color: #dc3545;
-        }
-
-        .delete-selected-btn:hover {
-            background-color: #c82333;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-        }
-
-        th,
-        td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #f7f7f7;
-            font-weight: bold;
-        }
-
-        tbody tr:hover {
-            background-color: #f1f1f1;
-        }
-
-        .actions-btn {
-            width: 13%;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .actions-btn a {
-            margin-left: 10px;
-            color: white;
-            padding: 3px 8px;
-            background-color: #007bff;
-            border-radius: 5px;
-            text-decoration: none;
-            transition: opacity 0.3s ease;
-            font-size: 16px;
-            line-height: 1.5;
-        }
-
-        .actions-btn a.edit-btn {
-            background-color: #007bff;
-        }
-
-        .actions-btn a:hover {
-            opacity: 0.8;
-        }
-
-
-        .actions-btn a.delete-btn {
-            background-color: #dc3545;
-        }
-
-        .select-product {
-            text-align: center;
-        }
-
-        .bar-chart {
-            display: flex;
-            justify-content: space-around;
-            align-items: flex-end;
-            height: 60vh;
-            width: 100%;
-            border: 1px solid #ddd;
-        }
-
-        .bar {
-            width: 50px;
-            background-color: #4CAF50;
-            margin: 5px;
-            position: relative;
-        }
-
-        .bar-label {
-            text-align: center;
-            color: white;
-            font-size: 12px;
-            margin-top: 12px;
-        }
-
-        .amount-label {
-            text-align: center;
-            color: black;
-            font-size: 12px;
-        }
-
-        .amount-label {
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            margin-bottom: 5px;
-        }
-
-        .year-selector {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .year-selector label {
-            margin-right: 10px;
-            font-size: 16px;
-            color: #333;
-        }
-
-        .year-selector select {
-            height: 30px;
-            padding: 0 15px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            font-size: 14px;
-            transition: border-color 0.3s;
-            outline: none;
-        }
-
-        .year-selector select:focus {
-            border-color: #ff6600;
-        }
-        .info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./statistical.css">
 </head>
 
 <body>
@@ -289,15 +15,15 @@
     <div id="header-container"></div>
 
     <!-- Main Content -->
-    <div class="container">
-        <h1>Doanh thu</h1>
-        <div class="info">
+    <div class="statistical-container container bg-light rounded shadow mt-4">
+        <h1 class="text-center mb-4">Doanh thu</h1>
+        <div class="info d-flex justify-content-between align-items-center">
             <div class="exchange-rate">
                 Đơn vị tiền tệ: <span style="color: #dc3545;">VNĐ</span>
             </div>
             <div class="year-selector">
                 <label for="year">Chọn năm:</label>
-                <select id="year" name="year">
+                <select id="year" name="year" class="form-select">
                     <option value="2025">2025</option>
                     <option value="2024">2024</option>
                     <option value="2023">2023</option>
@@ -317,14 +43,14 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            fetch('../header.html')
+            fetch('../header/header.html')
                 .then(response => response.text())
                 .then(data => {
                     document.getElementById('header-container').innerHTML = data;
 
                     // Load header.js explicitly after header.html is fetched
                     const script = document.createElement('script');
-                    script.src = '../header.js';
+                    script.src = '../header/header.js';
                     script.onload = () => {
                         if (typeof initializeHeader === 'function') {
                             initializeHeader(); // Call the function after header.js is loaded
@@ -343,6 +69,7 @@
     <script src="../checkAuth.js"></script>
     <script src="../Statistical/statistical.js"></script>
     <script src="../check-permission.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 
