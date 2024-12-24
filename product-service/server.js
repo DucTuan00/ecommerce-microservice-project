@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const categoryRoutes = require('./routes/categoryRoutes');
 const productRoutes = require('./routes/productRoutes');
+const path = require('path');
 
 const app = express();
 
@@ -11,6 +12,9 @@ app.use(cors({
 }));
 
 app.use(express.json());
+
+//Cấu hình uploads ảnh
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/api/category', categoryRoutes);
 app.use('/api/product', productRoutes);

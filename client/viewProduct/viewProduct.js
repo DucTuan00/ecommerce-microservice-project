@@ -45,7 +45,7 @@ async function fetchProductDetails() {
 
         // Cập nhật hình ảnh nếu có
         const productImage = document.querySelector('.product-image');
-        productImage.src = `../../product-service/${product.image}`;
+        productImage.src = `http://localhost:3003/${product.image}`;
         productImage.alt = product.name;
 
             // Add event listeners for quantity increment/decrement and Add to Cart button
@@ -112,7 +112,7 @@ function renderRelatedProducts(products) {
         card.className = 'card';
         card.innerHTML = `
             <a href="viewProduct.html?id=${product.id}" class="d-block">
-                <img src="../../product-service/${product.image}" class="card-img-top" alt="${product.name}">
+                <img src="http://localhost:3003/${product.image}" class="card-img-top" alt="${product.name}">
             </a>
             <div class="card-body">
                 <a href="viewProduct.html?id=${product.id}"><h6 class="card-title">${product.name}</h6></a>

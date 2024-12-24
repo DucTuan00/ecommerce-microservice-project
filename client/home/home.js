@@ -61,7 +61,7 @@ function renderProducts(products) {
             productItem.classList.add('product-item');
 
             const productImage = document.createElement('img');
-            productImage.src = `../../product-service/${product.image}`;
+            productImage.src = `http://localhost:3003/${product.image}`;
             productImage.alt = product.name;
 
             const productName = document.createElement('div');
