@@ -108,7 +108,7 @@ function createCartItemElement(item, product) {
     itemElement.classList.add('cart-item');
 
     const productImage = document.createElement('img');
-    productImage.src = `../../product-service/${product.image}`; //Lấy đường dẫn ảnh
+    productImage.src = `http://localhost:3000/${product.image}`; //Lấy đường dẫn ảnh
 
     itemElement.innerHTML = `
         <img src="${productImage.src}" alt="${product.name}" class="product-image">

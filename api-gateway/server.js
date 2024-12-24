@@ -29,6 +29,11 @@ app.use('/api/category', createProxyMiddleware({
     changeOrigin: true,
 }));
 
+app.use('/uploads', createProxyMiddleware({ 
+    target: 'http://localhost:3003/uploads', 
+    changeOrigin: true,
+}));
+
 app.use('/api/cart', createProxyMiddleware({ 
     target: 'http://localhost:3004/api/cart', 
     changeOrigin: true,
