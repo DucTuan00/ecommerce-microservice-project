@@ -14,7 +14,7 @@ const addOrderItems = (order_id, product_id, quantity, price, callback) => {
 // Lấy tất cả đơn hàng của người dùng
 const getOrdersByUserId = (user_id, callback) => {
     const sql = `
-        SELECT * FROM orders WHERE user_id = ?`;
+        SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC`;
     db.query(sql, [user_id], (err, results) => {
         if (err) return callback(err);
         callback(null, results);

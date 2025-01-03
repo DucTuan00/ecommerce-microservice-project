@@ -13,6 +13,9 @@ const config = {
   key1: 'sdngKKJmqEMzvh5QQcdD2A9XBSKUNaYn',
   key2: 'trMrHtvjo6myautxDUiAcYsVtaeQ8nhf',
   endpoint: 'https://sb-openapi.zalopay.vn/v2/create',
+  // key1: "PcY4iZIKFCIdgZvA6ueMcMHHUbRLYjPL",
+  // key2: "kLtgPl8HHhfvMuDHPwKfgfsY4Ydm9eIz",
+  // endpoint: "https://sb-openapi.zalopay.vn/v2/create"
 };
 
 /**
@@ -35,7 +38,7 @@ app.post('/api/payment', async (req, res) => {
     //{ redirecturl: `http://127.0.0.1:5500/client/order/order.html?paymentStatus=success&id=${order_id}` }
     embed_data,
     item: "[]",
-    callback_url: 'https://38e3-113-190-91-135.ngrok-free.app/api/order/payment/callback',
+    callback_url: 'https://f356-113-190-91-135.ngrok-free.app/api/order/payment/callback',
     description: `Thanh toán cho đơn hàng #${order_id}`,
   };
 
