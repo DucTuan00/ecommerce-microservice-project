@@ -1,6 +1,7 @@
 const { json } = require('express');
 const orderModel = require('../models/orderModel');
 const axios = require('axios');
+const CryptoJS = require('crypto-js');
 
 exports.createOrder = async (req, res) => {
     const user_id = req.userId;
@@ -258,7 +259,7 @@ exports.cancelOrder = (req, res) => {
 };
 
 exports.payOrder = async (req, res) => {
-    const { order_id } = req.body;
+    const { order_id, platform } = req.body;
 
     try {
         orderModel.getOrderById(order_id, async (err, order) => {
@@ -266,10 +267,28 @@ exports.payOrder = async (req, res) => {
 
             order = order[0];
 
+            let redirect_url;
+            const appRedirectUrl = "mobile-app://"; // Thay thế bằng URL scheme của ứng dụng mobile
+
+            if (platform === 'web') {
+                redirect_url = `http://localhost:5500/client/order/order.html`;
+            } else if (platform === 'android' || platform === 'ios') {
+                redirect_url = `${appRedirectUrl}order/${order.id}`;
+            } else {
+                return res.status(400).json({ message: 'Invalid platform' });
+            }
+
+            // Thêm redirect_url vào embed_data
+            const embed_data = {
+                order_id: order.id,
+                redirecturl: redirect_url // URL để quay lại web/app
+            };
+
             // Logic thanh toán (API ZaloPay)
             const paymentResponse = await axios.post('http://localhost:3006/api/payment', {
                 order_id: order.id,
                 amount: order.total_amount,
+                embed_data: JSON.stringify(embed_data)
             });
 
             return res.json({
@@ -281,5 +300,47 @@ exports.payOrder = async (req, res) => {
     } catch (error) {
         console.error('Error in payment process:', error.message || error);
         return res.status(error.status || 500).json({ message: error.message || 'Internal server error' });
+    }
+};
+
+const config = {
+    key2: 'trMrHtvjo6myautxDUiAcYsVtaeQ8nhf', // Callback chỉ cần key2
+};
+
+exports.payOrderCallback = async (req, res) => {
+    console.log("payOrderCallback called:", req.body);
+    try {
+        const dataStr = req.body.data;
+        console.log("dataStr:", dataStr);
+        const reqMac = req.body.mac;
+        const status = 'paid';
+
+        const mac = CryptoJS.HmacSHA256(dataStr, config.key2).toString();
+
+        // Kiểm tra callback hợp lệ
+        if (reqMac !== mac) {
+            return res.json({ return_code: -1, return_message: 'mac not equal' });
+        }
+
+        const dataJson = JSON.parse(dataStr);
+        console.log("dataJson:", dataJson);
+        const { order_id } = JSON.parse(dataJson.embed_data);
+
+        // Cập nhật trạng thái đơn hàng
+        orderModel.updateOrderStatus(order_id, status, (err, result) => {
+            if (err) {
+                console.error('Error updating order status:', err);
+                return res.json({ return_code: 0, return_message: 'Error updating order status' });
+            }
+            if (result.affectedRows === 0) {
+                console.error('Order not found:', order_id);
+                return res.json({ return_code: 0, return_message: 'Order not found' });
+            }
+            console.log(`Order ${order_id} status updated to paid`);
+            return res.json({ return_code: 1, return_message: 'success' });
+        });
+    } catch (error) {
+        console.error('Error in payment callback:', error);
+        return res.json({ return_code: 0, return_message: error.message });
     }
 };

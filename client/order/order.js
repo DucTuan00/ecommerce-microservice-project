@@ -152,38 +152,38 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     //lấy ra 2 thuộc tính trong url để kiểm tra, sau đó thay đổi trạng thái
-    const urlParams = new URLSearchParams(window.location.search);
-    const paymentStatus = urlParams.get('paymentStatus'); // Lấy trạng thái thanh toán
-    const order_id = urlParams.get('id'); // Lấy id đơn hàng
+    // const urlParams = new URLSearchParams(window.location.search);
+    // const paymentStatus = urlParams.get('paymentStatus'); // Lấy trạng thái thanh toán
+    // const order_id = urlParams.get('id'); // Lấy id đơn hàng
 
-    if (paymentStatus === 'success' && order_id) {
-        updateOrderStatusToPaid(order_id);
-    }
+    // if (paymentStatus === 'success' && order_id) {
+    //     updateOrderStatusToPaid(order_id);
+    // }
 
-    function updateOrderStatusToPaid(orderId) {
-        fetch(`http://localhost:3000/api/order/${orderId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${Token}`
-            },
-            body: JSON.stringify({ status: 'paid' }) // Cập nhật trạng thái thành 'paid'
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Không thể cập nhật trạng thái đơn hàng");
-            }
-            return response.json();
-        })
-        .then(data => {
-            alert("Thanh toán thành công!");
-            fetchOrders(); // Gọi lại hàm để render thông tin đơn hàng
-        })
-        .catch(error => {
-            console.error("Lỗi cập nhật trạng thái thanh toán:", error);
-            alert("Có lỗi xảy ra khi cập nhật trạng thái đơn hàng.");
-        });
-    }
+    // function updateOrderStatusToPaid(orderId) {
+    //     fetch(`http://localhost:3000/api/order/${orderId}`, {
+    //         method: 'PUT',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'Authorization': `Bearer ${Token}`
+    //         },
+    //         body: JSON.stringify({ status: 'paid' }) // Cập nhật trạng thái thành 'paid'
+    //     })
+    //     .then(response => {
+    //         if (!response.ok) {
+    //             throw new Error("Không thể cập nhật trạng thái đơn hàng");
+    //         }
+    //         return response.json();
+    //     })
+    //     .then(data => {
+    //         alert("Thanh toán thành công!");
+    //         fetchOrders(); // Gọi lại hàm để render thông tin đơn hàng
+    //     })
+    //     .catch(error => {
+    //         console.error("Lỗi cập nhật trạng thái thanh toán:", error);
+    //         alert("Có lỗi xảy ra khi cập nhật trạng thái đơn hàng.");
+    //     });
+    // }
     
     function renderOrderStatus(status) {
         switch (status.toLowerCase()) {

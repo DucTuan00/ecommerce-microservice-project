@@ -218,7 +218,10 @@ async function handlePayment(orderId) {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${Token}`
             },
-            body: JSON.stringify({ order_id: orderId }) // Gửi order_id qua API
+            body: JSON.stringify({
+                order_id: orderId,
+                platform: 'web'
+            }) // Gửi order_id qua API
         });
 
         if (!response.ok) {
